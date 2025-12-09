@@ -1,0 +1,30 @@
+# dependencies
+node_modules/
+
+# env
+.env
+.env.local
+.env.*.local
+/prisma/.env
+
+# build output (tsc)
+dist/
+build/
+*.tsbuildinfo
+
+# logs
+logs/
+*.log
+*.log.*
+
+# swagger cache
+swagger.json
+
+# ide/system
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# docker overrides
+docker-compose.override.yml
