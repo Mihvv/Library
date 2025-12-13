@@ -1,42 +1,91 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html,
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
+  background-color: #f8f9fa;
+  color: #212529;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.table {
+  --bs-table-bg: #ffffff;
+  --bs-table-color: #212529;
+  --bs-table-border-color: #dee2e6;
+  --bs-table-striped-bg: #f2f2f2;
+  --bs-table-striped-color: #212529;
+  --bs-table-hover-bg: #e9ecef;
+  --bs-table-hover-color: #212529;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+.table thead {
+  background-color: #e9ecef;
+}
+
+.table th,
+.table td {
+  border-color: #dee2e6;
+}
+
+.badge.bg-success {
+  background-color: #198754 !important;
+}
+
+.badge.bg-secondary {
+  background-color: #6c757d !important;
+}
+
+.form-control {
+  background-color: #ffffff;
+  color: #212529;
+  border: 1px solid #ced4da;
+}
+
+.form-control:focus {
+  background-color: #ffffff;
+  color: #212529;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.1rem rgba(13, 110, 253, 0.25);
+}
+
+.btn-primary {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  border-color: #ffc107;
+  color: #212529;
+}
+
+.btn-success {
+  background-color: #198754;
+  border-color: #198754;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: #ffffff;
 }
 
 a {
-  color: inherit;
+  color: #0d6efd;
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+a:hover {
+  color: #0a58ca;
+  text-decoration: underline;
+}
+
+.pagination .page-link {
+  color: #0d6efd;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  color: #ffffff;
+}
+
+.container {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
