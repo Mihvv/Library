@@ -16,9 +16,9 @@ app.use(express.json());
 const swaggerDocument = YAML.load('./openapi.yaml');
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use('/auth', authRoutes);
-app.use('/books', bookRoutes);
-app.use('/users', userRoutes);
-app.use('/loans', loanRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/books', bookRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/loans', loanRoutes);
 
 export default app;
