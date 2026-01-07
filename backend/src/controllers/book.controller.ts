@@ -1,81 +1,82 @@
 import { Request, Response } from 'express';
-import { prisma } from '../prisma/client';
+import { bookService } from '../services/book.service';
+import { CreateBookDto, UpdateBookDto } from '../dtos/book.dto';
 
 export async function createBook(req: Request, res: Response) {
-  const { title, author, isbn } = req.body;
-
-  if (!title || !author || !isbn) {
-    return res.status(400).json({ message: 'Missing required fields' });
-  }
-
   try {
-    const book = await prisma.book.create({
-      data: { title, author, isbn }
-    });
+    const dto: CreateBookDto = req.body;
+    const book = await bookService.createBook(dto);
     res.status(201).json(book);
-  } catch (e: any) {
-    if (e.code === 'P2002') {
-      return res.status(409).json({ message: 'ISBN already exists' });
+  } catch (error: any) {
+    if (error.message === 'ISBN already exists') {
+      return res.status(409).json({ message: error.message });
     }
     res.status(500).json({ message: 'Internal server error' });
   }
 }
 
 export async function getBooks(req: Request, res: Response) {
-  const books = await prisma.book.findMany({
-    orderBy: { title: 'asc' }
-  });
-  res.json(books);
+  try {
+    const books = await bookService.getAllBooks();
+    res.json(books);
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
 }
 
 export async function getBookById(req: Request, res: Response) {
-  const id = Number(req.params.id);
-  if (isNaN(id)) return res.status(400).json({ message: 'Invalid id' });
+  try {
+    const id = Number(req.params.id);
+    
+    if (isNaN(id)) {
+      return res.status(400).json({ message: 'Invalid id' });
+    }
 
-  const book = await prisma.book.findUnique({
-    where: { id }
-  });
-
-  if (!book) {
-    return res.status(404).json({ message: 'Book not found' });
+    const book = await bookService.getBookById(id);
+    res.json(book);
+  } catch (error: any) {
+    if (error.message === 'Book not found') {
+      return res.status(404).json({ message: error.message });
+    }
+    res.status(500).json({ message: 'Internal server error' });
   }
-
-  res.json(book);
 }
 
 export async function updateBook(req: Request, res: Response) {
-  const id = Number(req.params.id);
-  const { title, author, isbn } = req.body;
-
-  if (isNaN(id)) return res.status(400).json({ message: 'Invalid id' });
-
   try {
-    const book = await prisma.book.update({
-      where: { id },
-      data: { title, author, isbn }
-    });
-    res.json(book);
-  } catch (e: any) {
-    if (e.code === 'P2025') {
-      return res.status(404).json({ message: 'Book not found' });
+    const id = Number(req.params.id);
+    const dto: UpdateBookDto = req.body;
+    
+    if (isNaN(id)) {
+      return res.status(400).json({ message: 'Invalid id' });
     }
-    if (e.code === 'P2002') {
-      return res.status(409).json({ message: 'ISBN already exists' });
+
+    const book = await bookService.updateBook(id, dto);
+    res.json(book);
+  } catch (error: any) {
+    if (error.message === 'Book not found') {
+      return res.status(404).json({ message: error.message });
+    }
+    if (error.message === 'ISBN already exists') {
+      return res.status(409).json({ message: error.message });
     }
     res.status(500).json({ message: 'Internal server error' });
   }
 }
 
 export async function deleteBook(req: Request, res: Response) {
-  const id = Number(req.params.id);
-  if (isNaN(id)) return res.status(400).json({ message: 'Invalid id' });
-
   try {
-    await prisma.book.delete({ where: { id } });
+    const id = Number(req.params.id);
+    
+    if (isNaN(id)) {
+      return res.status(400).json({ message: 'Invalid id' });
+    }
+
+    await bookService.deleteBook(id);
     res.status(204).send();
-  } catch (e: any) {
-    if (e.code === 'P2025') {
-      return res.status(404).json({ message: 'Book not found' });
+  } catch (error: any) {
+    if (error.message === 'Book not found') {
+      return res.status(404).json({ message: error.message });
     }
     res.status(500).json({ message: 'Internal server error' });
   }
