@@ -1,5 +1,11 @@
 import { prisma } from '../prisma/client.js';
-import { CreateBookDto, UpdateBookDto, BookResponseDto } from '../dtos/book.dto.js';
+import { 
+  CreateBookDto, 
+  UpdateBookDto, 
+  BookResponseDto, 
+  GetBooksQueryDto,
+  PaginatedBooksResponseDto 
+} from '../dtos/book.dto.js';
 
 export class BookService {
   async createBook(dto: CreateBookDto): Promise<BookResponseDto> {
@@ -21,12 +27,42 @@ export class BookService {
     }
   }
 
-  async getAllBooks(): Promise<BookResponseDto[]> {
-    const books = await prisma.book.findMany({
-      orderBy: { title: 'asc' }
-    });
+  async getAllBooks(query: GetBooksQueryDto): Promise<PaginatedBooksResponseDto> {
+    const { page = 1, limit = 10, search, sortBy = 'title', order = 'asc' } = query;
+    
+    const skip = (page - 1) * limit;
 
-    return books;
+    const where = search ? {
+      OR: [
+        { title: { contains: search, mode: 'insensitive' as const } },
+        { author: { contains: search, mode: 'insensitive' as const } },
+        { isbn: { contains: search, mode: 'insensitive' as const } }
+      ]
+    } : {};
+
+    const [books, total] = await Promise.all([
+      prisma.book.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { [sortBy]: order }
+      }),
+      prisma.book.count({ where })
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      data: books,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages,
+        hasNext: page < totalPages,
+        hasPrev: page > 1
+      }
+    };
   }
 
   async getBookById(id: number): Promise<BookResponseDto> {

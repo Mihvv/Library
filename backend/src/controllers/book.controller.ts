@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { bookService } from '../services/book.service.js';
-import { CreateBookDto, UpdateBookDto } from '../dtos/book.dto.js';
+import { CreateBookDto, UpdateBookDto, GetBooksQueryDto } from '../dtos/book.dto.js';
 
 export async function createBook(req: Request, res: Response) {
   try {
@@ -17,8 +17,16 @@ export async function createBook(req: Request, res: Response) {
 
 export async function getBooks(req: Request, res: Response) {
   try {
-    const books = await bookService.getAllBooks();
-    res.json(books);
+    const query: GetBooksQueryDto = {
+      page: req.query.page ? Number(req.query.page) : 1,
+      limit: req.query.limit ? Number(req.query.limit) : 10,
+      search: req.query.search as string,
+      sortBy: req.query.sortBy as 'title' | 'author' | 'isbn' | undefined,
+      order: req.query.order as 'asc' | 'desc' | undefined
+    };
+
+    const result = await bookService.getAllBooks(query);
+    res.json(result);
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
   }
