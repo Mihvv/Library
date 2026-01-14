@@ -31,6 +31,8 @@ model User {
   password String
   role     Role    @default(USER)
   loans    Loan[]
+
+  @@map("user")
 }
 
 model Book {
@@ -39,6 +41,8 @@ model Book {
   author String
   isbn   String  @unique
   loans  Loan[]
+
+  @@map("book")
 }
 
 model Loan {
@@ -50,4 +54,6 @@ model Loan {
 
   user User @relation(fields: [userId], references: [id])
   book Book @relation(fields: [bookId], references: [id])
+
+  @@map("loan")
 }

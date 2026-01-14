@@ -1,6 +1,5 @@
 import { Response, NextFunction } from 'express';
-import { AuthRequest } from './auth.middleware';
-import { prisma } from '../prisma/client';
+import { AuthRequest } from './auth.middleware.js';
 
 export function requireAdmin(
   req: AuthRequest,

@@ -1,5 +1,5 @@
-import { prisma } from '../prisma/client';
-import { CreateBookDto, UpdateBookDto, BookResponseDto } from '../dtos/book.dto';
+import { prisma } from '../prisma/client.js';
+import { CreateBookDto, UpdateBookDto, BookResponseDto } from '../dtos/book.dto.js';
 
 export class BookService {
   async createBook(dto: CreateBookDto): Promise<BookResponseDto> {

@@ -1,5 +1,5 @@
-import { prisma } from '../prisma/client';
-import { CreateLoanDto, LoanResponseDto } from '../dtos/loan.dto';
+import { prisma } from '../prisma/client.js';
+import { CreateLoanDto, LoanResponseDto } from '../dtos/loan.dto.js';
 
 export class LoanService {
   async createLoan(userId: number, dto: CreateLoanDto): Promise<LoanResponseDto> {

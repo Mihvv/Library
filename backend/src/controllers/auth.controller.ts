@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { authService } from '../services/auth.service';
-import { RegisterDto, LoginDto } from '../dtos/auth.dto';
+import { authService } from '../services/auth.service.js';
+import { RegisterDto, LoginDto } from '../dtos/auth.dto.js';
 
 export async function register(req: Request, res: Response) {
   try {

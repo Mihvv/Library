@@ -4,11 +4,11 @@ import {
   returnLoan,
   getMyLoans,
   getAllLoans
-} from '../controllers/loan.controller';
-import { authMiddleware } from '../middlewares/auth.middleware';
-import { requireAdmin } from '../middlewares/role.middleware';
-import { validateDto } from '../middlewares/validation.middleware';
-import { CreateLoanDto } from '../dtos/loan.dto';
+} from '../controllers/loan.controller.js';
+import { authMiddleware } from '../middlewares/auth.middleware.js';
+import { requireAdmin } from '../middlewares/role.middleware.js';
+import { validateDto } from '../middlewares/validation.middleware.js';
+import { CreateLoanDto } from '../dtos/loan.dto.js';
 
 const router = Router();
 

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { bookService } from '../services/book.service';
-import { CreateBookDto, UpdateBookDto } from '../dtos/book.dto';
+import { bookService } from '../services/book.service.js';
+import { CreateBookDto, UpdateBookDto } from '../dtos/book.dto.js';
 
 export async function createBook(req: Request, res: Response) {
   try {
