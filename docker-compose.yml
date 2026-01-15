@@ -3,7 +3,7 @@ services:
     image: postgres:18
     restart: always
     ports:
-      - "5432:5432"
+      - "5434:5434"
     environment:
       POSTGRES_DB: library
       POSTGRES_USER: postgres
@@ -19,7 +19,7 @@ services:
     depends_on:
       - db
     environment:
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/library
+      DATABASE_URL: postgresql://postgres:postgres@db:5434/library
 
   frontend:
     build: ./frontend
