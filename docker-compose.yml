@@ -3,7 +3,7 @@ services:
     image: postgres:18
     restart: always
     ports:
-      - "5434:5434"
+      - "5434:5432"
     environment:
       POSTGRES_DB: library
       POSTGRES_USER: postgres
@@ -19,7 +19,7 @@ services:
     depends_on:
       - db
     environment:
-      DATABASE_URL: postgresql://postgres:postgres@db:5434/library
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/library
 
   frontend:
     build: ./frontend
@@ -28,6 +28,11 @@ services:
       - "3000:3000"
     depends_on:
       - backend
+    environment:
+      API_URL: http://backend:4000/api
+      NEXT_PUBLIC_API_URL: http://localhost:4000/api
+      NEXTAUTH_URL: http://localhost:3000
+      NEXTAUTH_SECRET: super-secret-key-change-in-production-min-32-characters-long
 
 volumes:
   pgdata:

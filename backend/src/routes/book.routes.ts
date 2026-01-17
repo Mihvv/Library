@@ -13,8 +13,8 @@ import { CreateBookDto, UpdateBookDto } from '../dtos/book.dto.js';
 
 const router = Router();
 
-router.get('/', authMiddleware, getBooks);
-router.get('/:id', authMiddleware, getBookById);
+router.get('/', getBooks);
+router.get('/:id', getBookById);
 
 router.post('/', authMiddleware, requireAdmin, validateDto(CreateBookDto), createBook);
 router.put('/:id', authMiddleware, requireAdmin, validateDto(UpdateBookDto), updateBook);
