@@ -6,8 +6,8 @@ import { Providers } from './providers';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Library Management System',
-  description: 'Browse and borrow books from our collection',
+  title: 'Biblioteka - System Zarządzania',
+  description: 'Przeglądaj i wypożyczaj książki z naszej kolekcji',
 };
 
 export default function RootLayout({

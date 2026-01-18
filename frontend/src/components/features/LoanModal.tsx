@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import api from '@/lib/axios';
 import { Book } from '@/lib/types';
+import { X } from 'lucide-react';
 
 interface LoanModalProps {
   book: Book;
@@ -34,14 +35,22 @@ export default function LoanModal({ book, onClose, onSuccess }: LoanModalProps) 
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
+      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 relative">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+          disabled={loading}
+        >
+          <X className="w-5 h-5" />
+        </button>
+
         <h2 className="text-2xl font-bold mb-4 text-gray-900">Wypożycz książkę</h2>
 
         <div className="mb-6">
-          <div className="bg-gray-50 rounded-lg p-4 mb-4">
+          <div className="bg-amber-50 rounded-lg p-4 mb-4 border border-amber-100">
             <h3 className="font-semibold text-gray-900 mb-2">{book.title}</h3>
-            <p className="text-sm text-gray-600 mb-1">autorstwa {book.author}</p>
+            <p className="text-sm text-gray-600 mb-1">{book.author}</p>
             <p className="text-xs text-gray-500">ISBN: {book.isbn}</p>
           </div>
 
@@ -68,9 +77,9 @@ export default function LoanModal({ book, onClose, onSuccess }: LoanModalProps) 
           <button
             onClick={handleLoan}
             disabled={loading}
-            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed transition"
+            className="flex-1 px-4 py-2 bg-amber-700 text-white rounded-lg hover:bg-amber-800 disabled:bg-amber-300 disabled:cursor-not-allowed transition"
           >
-            {loading ? 'Przetwarzanie...' : 'Potwierdź wypożyczenie'}
+            {loading ? 'Przetwarzanie...' : 'Potwierdź'}
           </button>
         </div>
       </div>

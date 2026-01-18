@@ -75,7 +75,7 @@ export default function LoansPage() {
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <BookOpen className="w-8 h-8 text-blue-600" />
+            <BookOpen className="w-8 h-8 text-amber-700" />
             <h1 className="text-3xl font-bold text-gray-900">Moje wypożyczenia</h1>
           </div>
           <p className="text-gray-600">Przeglądaj i zarządzaj swoimi wypożyczonymi książkami</p>
@@ -93,7 +93,7 @@ export default function LoansPage() {
               <p className="text-gray-500 mb-4">Nie masz aktywnych wypożyczeń</p>
               <button
                 onClick={() => router.push('/')}
-                className="inline-flex items-center gap-2 text-blue-600 hover:underline"
+                className="inline-flex items-center gap-2 text-amber-700 hover:underline"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Przeglądaj książki
@@ -123,7 +123,7 @@ export default function LoansPage() {
                     <tr key={loan.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <BookOpen className="w-5 h-5 text-blue-600 flex-shrink-0" />
+                          <BookOpen className="w-5 h-5 text-amber-700 flex-shrink-0" />
                           <div>
                             <div className="font-medium text-gray-900">{loan.book.title}</div>
                             <div className="text-sm text-gray-500">ISBN: {loan.book.isbn}</div>

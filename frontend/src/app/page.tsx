@@ -20,6 +20,14 @@ import {
   Library
 } from 'lucide-react';
 
+// Kolory brązowe dla motywu biblioteki
+const brandColors = {
+  primary: 'amber-700',      // #b45309
+  primaryHover: 'amber-800', // #92400e
+  primaryLight: 'amber-50',  // #fffbeb
+  primaryBorder: 'amber-200' // #fde68a
+};
+
 export default function HomePage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -152,7 +160,7 @@ export default function HomePage() {
     <button
       onClick={() => handleSortChange(field)}
       className={`text-xs font-medium uppercase tracking-wider ${
-        sortBy === field ? 'text-blue-600' : 'text-gray-500 hover:text-gray-700'
+        sortBy === field ? 'text-amber-700' : 'text-gray-500 hover:text-gray-700'
       }`}
     >
       {label}
@@ -170,7 +178,7 @@ export default function HomePage() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <Library className="w-8 h-8 text-blue-600" />
+            <Library className="w-8 h-8 text-amber-700" />
             <h1 className="text-3xl font-bold text-gray-900">Biblioteka</h1>
           </div>
           <p className="text-gray-600">
@@ -182,15 +190,15 @@ export default function HomePage() {
 
         {/* Login prompt */}
         {!isAuthenticated && (
-          <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <p className="text-blue-800 text-sm">
+          <div className="mb-6 bg-amber-50 border border-amber-200 rounded-lg p-4">
+            <p className="text-amber-900 text-sm">
               <BookOpen className="inline w-4 h-4 mr-2" />
               Aby wypożyczać książki, musisz być zalogowany.{' '}
-              <a href="/login" className="font-semibold underline hover:text-blue-900">
+              <a href="/login" className="font-semibold underline hover:text-amber-950">
                 Zaloguj się
               </a>{' '}
               lub{' '}
-              <a href="/register" className="font-semibold underline hover:text-blue-900">
+              <a href="/register" className="font-semibold underline hover:text-amber-950">
                 zarejestruj się
               </a>
               .
@@ -208,7 +216,7 @@ export default function HomePage() {
                 placeholder="Szukaj po tytule, autorze lub ISBN..."
                 value={search}
                 onChange={(e) => handleSearchChange(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
               />
             </div>
 
@@ -219,7 +227,7 @@ export default function HomePage() {
                   setLimit(Number(e.target.value));
                   setPage(1);
                 }}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
               >
                 <option value={10}>10 na stronę</option>
                 <option value={20}>20 na stronę</option>
@@ -230,7 +238,7 @@ export default function HomePage() {
               {isAdmin && (
                 <button
                   onClick={handleCreateBook}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition whitespace-nowrap"
+                  className="flex items-center gap-2 px-4 py-2 bg-amber-700 text-white rounded-lg hover:bg-amber-800 transition whitespace-nowrap"
                 >
                   <Plus className="w-5 h-5" />
                   Dodaj książkę
@@ -257,7 +265,7 @@ export default function HomePage() {
             {search && (
               <button
                 onClick={() => handleSearchChange('')}
-                className="text-blue-600 hover:underline"
+                className="text-amber-700 hover:underline"
               >
                 Wyczyść wyszukiwanie
               </button>
@@ -301,7 +309,7 @@ export default function HomePage() {
                             {isAuthenticated ? (
                               <button
                                 onClick={() => handleLoanBook(book)}
-                                className="px-3 py-1.5 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition"
+                                className="px-3 py-1.5 bg-amber-700 text-white text-sm rounded hover:bg-amber-800 transition"
                               >
                                 Wypożycz
                               </button>
@@ -319,7 +327,7 @@ export default function HomePage() {
                               <>
                                 <button
                                   onClick={() => handleEditBook(book)}
-                                  className="p-1.5 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition"
+                                  className="p-1.5 text-gray-600 hover:text-amber-700 hover:bg-amber-50 rounded transition"
                                   title="Edytuj"
                                 >
                                   <Edit2 className="w-4 h-4" />

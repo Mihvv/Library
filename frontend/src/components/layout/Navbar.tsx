@@ -11,7 +11,7 @@ export default function Navbar() {
 
   const handleSignOut = async () => {
     await signOut({ redirect: false });
-    router.push('/login');
+    router.push('/');
   };
 
   return (
@@ -19,7 +19,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 text-xl font-bold text-gray-900 hover:text-blue-600 transition">
+          <Link href="/" className="flex items-center gap-2 text-xl font-bold text-gray-900 hover:text-amber-700 transition">
             <Library className="w-6 h-6" />
             Biblioteka
           </Link>
@@ -33,7 +33,7 @@ export default function Navbar() {
                   className="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition"
                 >
                   <BookOpen className="w-4 h-4" />
-                  Wypożyczenia
+                  Moje wypożyczenia
                 </Link>
 
                 {session.user.role === 'ADMIN' && (
@@ -75,10 +75,10 @@ export default function Navbar() {
                 </Link>
                 <Link
                   href="/register"
-                  className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                  className="flex items-center gap-2 px-4 py-2 text-sm bg-amber-700 text-white rounded-lg hover:bg-amber-800 transition"
                 >
                   <UserPlus className="w-4 h-4" />
-                  Zarejestruj się
+                  <span>Zarejestruj się</span>
                 </Link>
               </div>
             )}

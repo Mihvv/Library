@@ -111,7 +111,7 @@ export default function AdminPanel() {
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <Shield className="w-8 h-8 text-blue-600" />
+            <Shield className="w-8 h-8 text-amber-700" />
             <h1 className="text-3xl font-bold text-gray-900">Panel administratora</h1>
           </div>
           <p className="text-gray-600">Zarządzaj użytkownikami i monitoruj wszystkie wypożyczenia</p>
@@ -124,7 +124,7 @@ export default function AdminPanel() {
               onClick={() => setActiveTab('users')}
               className={`flex items-center gap-2 pb-4 px-1 border-b-2 font-medium transition ${
                 activeTab === 'users'
-                  ? 'border-blue-600 text-blue-600'
+                  ? 'border-amber-700 text-amber-700'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
@@ -135,7 +135,7 @@ export default function AdminPanel() {
               onClick={() => setActiveTab('loans')}
               className={`flex items-center gap-2 pb-4 px-1 border-b-2 font-medium transition ${
                 activeTab === 'loans'
-                  ? 'border-blue-600 text-blue-600'
+                  ? 'border-amber-700 text-amber-700'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import api from '@/lib/axios';
 import { Book } from '@/lib/types';
+import { X } from 'lucide-react';
 
 interface BookModalProps {
   book: Book | null;
@@ -50,8 +51,15 @@ export default function BookModal({ book, isEdit, onClose, onSave }: BookModalPr
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
+      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 relative">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
         <h2 className="text-2xl font-bold mb-4 text-gray-900">
           {isEdit ? 'Edytuj książkę' : 'Dodaj nową książkę'}
         </h2>
@@ -65,7 +73,7 @@ export default function BookModal({ book, isEdit, onClose, onSave }: BookModalPr
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
               required
             />
           </div>
@@ -78,7 +86,7 @@ export default function BookModal({ book, isEdit, onClose, onSave }: BookModalPr
               type="text"
               value={author}
               onChange={(e) => setAuthor(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
               required
             />
           </div>
@@ -91,7 +99,7 @@ export default function BookModal({ book, isEdit, onClose, onSave }: BookModalPr
               type="text"
               value={isbn}
               onChange={(e) => setIsbn(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
               required
             />
           </div>
@@ -113,7 +121,7 @@ export default function BookModal({ book, isEdit, onClose, onSave }: BookModalPr
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed transition"
+              className="flex-1 px-4 py-2 bg-amber-700 text-white rounded-lg hover:bg-amber-800 disabled:bg-amber-300 disabled:cursor-not-allowed transition"
             >
               {loading ? 'Zapisywanie...' : 'Zapisz'}
             </button>
