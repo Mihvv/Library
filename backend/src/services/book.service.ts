@@ -45,15 +45,33 @@ export class BookService {
         where,
         skip,
         take: limit,
-        orderBy: { [sortBy]: order }
+        orderBy: { [sortBy]: order },
+        include: {
+          loans: {
+            where: {
+              returnDate: null
+            },
+            select: {
+              id: true
+            }
+          }
+        }
       }),
       prisma.book.count({ where })
     ]);
 
     const totalPages = Math.ceil(total / limit);
 
+    const booksWithAvailability = books.map(book => ({
+      id: book.id,
+      title: book.title,
+      author: book.author,
+      isbn: book.isbn,
+      isAvailable: book.loans.length === 0
+    }));
+
     return {
-      data: books,
+      data: booksWithAvailability,
       pagination: {
         total,
         page,

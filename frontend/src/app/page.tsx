@@ -128,6 +128,13 @@ export default function HomePage() {
       router.push('/login');
       return;
     }
+    
+    // Sprawdź czy książka jest dostępna
+    if (book.isAvailable === false) {
+      alert('Ta książka jest już wypożyczona i niedostępna');
+      return;
+    }
+    
     setSelectedBook(book);
     setIsLoanModalOpen(true);
   };
@@ -288,6 +295,9 @@ export default function HomePage() {
                       <th className="px-6 py-3 text-left">
                         <SortButton field="isbn" label="ISBN" />
                       </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                      </th>
                       <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Akcje
                       </th>
@@ -304,12 +314,29 @@ export default function HomePage() {
                         </td>
                         <td className="px-6 py-4 text-gray-600">{book.author}</td>
                         <td className="px-6 py-4 text-sm text-gray-500">{book.isbn}</td>
+                        <td className="px-6 py-4">
+                          {book.isAvailable ? (
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                              Dostępna
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                              Wypożyczona
+                            </span>
+                          )}
+                        </td>
                         <td className="px-6 py-4 text-right">
                           <div className="flex items-center justify-end gap-2">
                             {isAuthenticated ? (
                               <button
                                 onClick={() => handleLoanBook(book)}
-                                className="px-3 py-1.5 bg-amber-700 text-white text-sm rounded hover:bg-amber-800 transition"
+                                disabled={!book.isAvailable}
+                                className={`px-3 py-1.5 text-white text-sm rounded transition ${
+                                  book.isAvailable
+                                    ? 'bg-amber-700 hover:bg-amber-800'
+                                    : 'bg-gray-300 cursor-not-allowed'
+                                }`}
+                                title={book.isAvailable ? 'Wypożycz' : 'Książka jest już wypożyczona'}
                               >
                                 Wypożycz
                               </button>
