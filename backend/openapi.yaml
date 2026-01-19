@@ -27,15 +27,57 @@ components:
           type: string
           enum: [USER, ADMIN]
 
+    UserListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        role:
+          type: string
+          enum: [USER, ADMIN]
+        loans:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              bookId:
+                type: integer
+              borrowedAt:
+                type: string
+                format: date-time
+
     UserDetail:
-      allOf:
-        - $ref: '#/components/schemas/User'
-        - type: object
-          properties:
-            loans:
-              type: array
-              items:
-                $ref: '#/components/schemas/Loan'
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        role:
+          type: string
+          enum: [USER, ADMIN]
+        loans:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              bookId:
+                type: integer
+              borrowedAt:
+                type: string
+                format: date-time
+              returnDate:
+                type: string
+                format: date-time
+                nullable: true
+              book:
+                $ref: '#/components/schemas/Book'
 
     AuthRequest:
       type: object
@@ -45,8 +87,10 @@ components:
       properties:
         email:
           type: string
+          format: email
         password:
           type: string
+          minLength: 6
 
     AuthResponse:
       type: object
@@ -66,13 +110,27 @@ components:
         isbn:
           type: string
 
+    BookWithAvailability:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        author:
+          type: string
+        isbn:
+          type: string
+        isAvailable:
+          type: boolean
+
     BooksResponse:
       type: object
       properties:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/Book'
+            $ref: '#/components/schemas/BookWithAvailability'
         pagination:
           type: object
           properties:
@@ -84,11 +142,19 @@ components:
               type: integer
             totalPages:
               type: integer
+            hasNext:
+              type: boolean
+            hasPrev:
+              type: boolean
 
     Loan:
       type: object
       properties:
         id:
+          type: integer
+        userId:
+          type: integer
+        bookId:
           type: integer
         borrowedAt:
           type: string
@@ -100,7 +166,30 @@ components:
         book:
           $ref: '#/components/schemas/Book'
         user:
-          $ref: '#/components/schemas/User'
+          type: object
+          properties:
+            id:
+              type: integer
+            email:
+              type: string
+
+    ValidationError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Validation failed"
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              errors:
+                type: array
+                items:
+                  type: string
 
     Error:
       type: object
@@ -116,6 +205,8 @@ paths:
   /auth/register:
     post:
       summary: Register new user
+      tags:
+        - Auth
       security: []
       requestBody:
         required: true
@@ -130,6 +221,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
         '409':
           description: Email already exists
           content:
@@ -146,6 +243,8 @@ paths:
   /auth/login:
     post:
       summary: Login user
+      tags:
+        - Auth
       security: []
       requestBody:
         required: true
@@ -160,6 +259,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
         '401':
           description: Invalid credentials
           content:
@@ -176,17 +281,25 @@ paths:
   /users:
     get:
       summary: List all users (ADMIN)
+      tags:
+        - Users
       security:
         - BearerAuth: []
       responses:
         '200':
-          description: List of users
+          description: List of users with their active loans
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
+                  $ref: '#/components/schemas/UserListItem'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '403':
           description: Forbidden
           content:
@@ -203,6 +316,8 @@ paths:
   /users/{id}:
     get:
       summary: Get user details (ADMIN)
+      tags:
+        - Users
       parameters:
         - in: path
           name: id
@@ -211,13 +326,25 @@ paths:
             type: integer
       responses:
         '200':
-          description: User details
+          description: User details with all loans
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserDetail'
         '400':
           description: Invalid user id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -236,6 +363,8 @@ paths:
                 $ref: '#/components/schemas/Error'
     delete:
       summary: Delete user (ADMIN)
+      tags:
+        - Users
       parameters:
         - in: path
           name: id
@@ -247,6 +376,18 @@ paths:
           description: Deleted
         '400':
           description: Invalid user id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -267,6 +408,8 @@ paths:
   /books:
     get:
       summary: List books with pagination and filtering
+      tags:
+        - Books
       security: []
       parameters:
         - in: query
@@ -274,33 +417,37 @@ paths:
           schema:
             type: integer
             default: 1
+            minimum: 1
           description: Page number
         - in: query
           name: limit
           schema:
             type: integer
             default: 10
+            minimum: 1
           description: Items per page
         - in: query
           name: search
           schema:
             type: string
-          description: Search in title, author, or ISBN
+          description: Search in title, author, or ISBN (case insensitive)
         - in: query
           name: sortBy
           schema:
             type: string
             enum: [title, author, isbn]
+            default: title
           description: Field to sort by
         - in: query
           name: order
           schema:
             type: string
             enum: [asc, desc]
+            default: asc
           description: Sort order
       responses:
         '200':
-          description: List of books with pagination
+          description: List of books with availability status and pagination
           content:
             application/json:
               schema:
@@ -313,6 +460,8 @@ paths:
                 $ref: '#/components/schemas/Error'
     post:
       summary: Create book (ADMIN)
+      tags:
+        - Books
       requestBody:
         required: true
         content:
@@ -323,10 +472,15 @@ paths:
               properties:
                 title:
                   type: string
+                  minLength: 1
+                  maxLength: 255
                 author:
                   type: string
+                  minLength: 1
+                  maxLength: 255
                 isbn:
                   type: string
+                  description: Valid ISBN-10 or ISBN-13
       responses:
         '201':
           description: Created
@@ -334,6 +488,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Book'
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '409':
           description: ISBN already exists
           content:
@@ -350,6 +522,8 @@ paths:
   /books/{id}:
     get:
       summary: Get book details
+      tags:
+        - Books
       security: []
       parameters:
         - in: path
@@ -384,6 +558,8 @@ paths:
                 $ref: '#/components/schemas/Error'
     put:
       summary: Update book (ADMIN)
+      tags:
+        - Books
       parameters:
         - in: path
           name: id
@@ -399,10 +575,15 @@ paths:
               properties:
                 title:
                   type: string
+                  minLength: 1
+                  maxLength: 255
                 author:
                   type: string
+                  minLength: 1
+                  maxLength: 255
                 isbn:
                   type: string
+                  description: Valid ISBN-10 or ISBN-13
       responses:
         '200':
           description: Updated
@@ -411,7 +592,21 @@ paths:
               schema:
                 $ref: '#/components/schemas/Book'
         '400':
-          description: Invalid id
+          description: Invalid id or validation failed
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/Error'
+                  - $ref: '#/components/schemas/ValidationError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -436,6 +631,8 @@ paths:
                 $ref: '#/components/schemas/Error'
     delete:
       summary: Delete book (ADMIN)
+      tags:
+        - Books
       parameters:
         - in: path
           name: id
@@ -447,6 +644,18 @@ paths:
           description: Deleted
         '400':
           description: Invalid id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -467,15 +676,29 @@ paths:
   /loans:
     get:
       summary: List all loans (ADMIN)
+      tags:
+        - Loans
       responses:
         '200':
-          description: Loans list
+          description: All loans with user and book details
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Loan'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '500':
           description: Internal server error
           content:
@@ -484,6 +707,8 @@ paths:
                 $ref: '#/components/schemas/Error'
     post:
       summary: Create loan (USER)
+      tags:
+        - Loans
       requestBody:
         required: true
         content:
@@ -494,6 +719,7 @@ paths:
               properties:
                 bookId:
                   type: integer
+                  minimum: 1
       responses:
         '201':
           description: Loan created
@@ -501,6 +727,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Loan'
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '404':
           description: Book not found
           content:
@@ -523,15 +761,23 @@ paths:
   /loans/me:
     get:
       summary: Get my loans (USER)
+      tags:
+        - Loans
       responses:
         '200':
-          description: Loans list
+          description: Current user's loans with book details
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Loan'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '500':
           description: Internal server error
           content:
@@ -541,7 +787,10 @@ paths:
 
   /loans/{id}/return:
     put:
-      summary: Return loan (USER)
+      summary: Return loan (USER or ADMIN)
+      tags:
+        - Loans
+      description: Users can return their own loans, admins can return any loan
       parameters:
         - in: path
           name: id
@@ -561,8 +810,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '403':
-          description: Forbidden
+          description: Forbidden (trying to return someone else's loan)
           content:
             application/json:
               schema:

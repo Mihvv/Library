@@ -20,7 +20,6 @@ import {
   Library
 } from 'lucide-react';
 
-// Kolory brązowe dla motywu biblioteki
 const brandColors = {
   primary: 'amber-700',      // #b45309
   primaryHover: 'amber-800', // #92400e
