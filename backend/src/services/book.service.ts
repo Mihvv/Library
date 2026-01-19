@@ -62,7 +62,7 @@ export class BookService {
 
     const totalPages = Math.ceil(total / limit);
 
-    const booksWithAvailability = books.map(book => ({
+    const booksAvail = books.map(book => ({
       id: book.id,
       title: book.title,
       author: book.author,
@@ -71,7 +71,7 @@ export class BookService {
     }));
 
     return {
-      data: booksWithAvailability,
+      data: booksAvail,
       pagination: {
         total,
         page,
