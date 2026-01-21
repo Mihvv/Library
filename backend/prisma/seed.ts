@@ -61,6 +61,62 @@ async function main() {
         author: 'Martin Fowler',
         isbn: '978-0134757599'
       }
+    }),
+    prisma.book.create({
+      data: {
+        title: 'The Shadow of the Torturer',
+        author: 'Gene Wolfe',
+        isbn: '9780671540661'
+      }
+    }),
+    prisma.book.create({
+      data: {
+        title: 'The Claw of the Conciliator',
+        author: 'Gene Wolfe',
+        isbn: '9780671416164'
+      }
+    }),
+    prisma.book.create({
+      data: {
+        title: 'The Sword of the Lictor',
+        author: 'Gene Wolfe',
+        isbn: '9780671631932'
+      }
+    }),
+    prisma.book.create({
+      data: {
+        title: 'The Citadel of the Autarch',
+        author: 'Gene Wolfe',
+        isbn: '9780671496661'
+      }
+    }),
+    prisma.book.create({
+      data: {
+        title: 'The Urth of the New Sun',
+        author: 'Gene Wolfe',
+        isbn: '9780312863944'
+      }
+    }),
+    prisma.book.create({
+      data: {
+        title: 'The Maniac',
+        author: 'Benjamín Labatut',
+        isbn: '9780593654477'
+      }
+    }),
+    prisma.book.create({
+      data: {
+        title: 'The Rise of Theodore Roosevelt',
+        author: 'Edmund Morris',
+        isbn: '9780375756788'
+      }
+    }),
+    prisma.book.create({
+      data: {
+        title: 'Expressionism in Philosophy: Spinoza',
+        author: 'Gilles Deleuze',
+        isbn: '9780942299519'
+      }
     })
   ]);
   console.log(`Created ${books.length} books`);
@@ -77,9 +133,9 @@ async function main() {
 
   console.log('\nSeeding completed successfully!');
   console.log('\nSummary:');
-  console.log(`   Users: ${await prisma.user.count()}`);
-  console.log(`   Books: ${await prisma.book.count()}`);
-  console.log(`   Loans: ${await prisma.loan.count()}`);
+  console.log(`Users: ${await prisma.user.count()}`);
+  console.log(`Books: ${await prisma.book.count()}`);
+  console.log(`Loans: ${await prisma.loan.count()}`);
 }
 
 main()
