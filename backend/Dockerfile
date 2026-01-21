@@ -7,8 +7,6 @@ RUN npm install
 
 COPY . .
 
-RUN npx prisma generate
-
 RUN npx tsc
 
 EXPOSE 4000
