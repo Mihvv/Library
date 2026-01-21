@@ -20,13 +20,6 @@ import {
   Library
 } from 'lucide-react';
 
-const brandColors = {
-  primary: 'amber-700',      // #b45309
-  primaryHover: 'amber-800', // #92400e
-  primaryLight: 'amber-50',  // #fffbeb
-  primaryBorder: 'amber-200' // #fde68a
-};
-
 export default function HomePage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -128,7 +121,6 @@ export default function HomePage() {
       return;
     }
     
-    // Sprawdź czy książka jest dostępna
     if (book.isAvailable === false) {
       alert('Ta książka jest już wypożyczona i niedostępna');
       return;

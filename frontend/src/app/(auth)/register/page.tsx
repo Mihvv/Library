@@ -36,7 +36,6 @@ export default function RegisterPage() {
         password,
       });
 
-      // Po pomyślnej rejestracji, przekieruj na stronę logowania
       router.push('/login?registered=true');
     } catch (err: any) {
       if (err.response?.status === 409) {
@@ -51,7 +50,6 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 relative">
-      {/* Przycisk powrotu */}
       <Link
         href="/"
         className="absolute top-4 left-4 flex items-center gap-2 text-gray-600 hover:text-amber-700 transition"
