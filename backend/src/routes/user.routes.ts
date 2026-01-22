@@ -4,8 +4,8 @@ import {
   getUserById,
   deleteUser
 } from '../controllers/user.controller.js';
-import { authMiddleware } from '../middlewares/auth.middleware.js';
-import { requireAdmin } from '../middlewares/role.middleware.js';
+import { authMiddleware } from '../middlewares/auth.middleware';
+import { requireAdmin } from '../middlewares/role.middleware';
 
 const router = Router();
 

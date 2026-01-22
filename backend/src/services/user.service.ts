@@ -1,5 +1,5 @@
-import { prisma } from '../prisma/client.js';
-import { UserListItemDto, UserResponseDto } from '../dtos/user.dto.js';
+import { prisma } from '../prisma/client';
+import { UserListItemDto, UserResponseDto } from '../dtos/user.dto';
 
 export class UserService {
   async getAllUsers(): Promise<UserListItemDto[]> {

@@ -6,10 +6,10 @@ import {
   updateBook,
   deleteBook
 } from '../controllers/book.controller.js';
-import { authMiddleware } from '../middlewares/auth.middleware.js';
-import { requireAdmin } from '../middlewares/role.middleware.js';
-import { validateDto } from '../middlewares/validation.middleware.js';
-import { CreateBookDto, UpdateBookDto } from '../dtos/book.dto.js';
+import { authMiddleware } from '../middlewares/auth.middleware';
+import { requireAdmin } from '../middlewares/role.middleware';
+import { validateDto } from '../middlewares/validation.middleware';
+import { CreateBookDto, UpdateBookDto } from '../dtos/book.dto';
 
 const router = Router();
 

@@ -1,7 +1,7 @@
 import { Response } from 'express';
-import { AuthRequest } from '../middlewares/auth.middleware.js';
-import { loanService } from '../services/loan.service.js';
-import { CreateLoanDto } from '../dtos/loan.dto.js';
+import { AuthRequest } from '../middlewares/auth.middleware';
+import { loanService } from '../services/loan.service';
+import { CreateLoanDto } from '../dtos/loan.dto';
 
 export async function createLoan(req: AuthRequest, res: Response) {
   try {

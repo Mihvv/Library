@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
-import { prisma } from '../prisma/client.js';
-import { signToken } from '../utils/jwt.js';
-import { RegisterDto, LoginDto, AuthResponseDto } from '../dtos/auth.dto.js';
-import { UserResponseDto } from '../dtos/user.dto.js';
+import { prisma } from '../prisma/client';
+import { signToken } from '../utils/jwt';
+import { RegisterDto, LoginDto, AuthResponseDto } from '../dtos/auth.dto';
+import { UserResponseDto } from '../dtos/user.dto';
 
 export class AuthService {
   async register(dto: RegisterDto): Promise<UserResponseDto> {
