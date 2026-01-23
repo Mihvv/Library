@@ -265,7 +265,7 @@ model Loan {
 │   ├── package.json
 │   └── tsconfig.json
 │
-└── docker-compose.yml           # PostgreSQL + pgAdmin
+└── docker-compose.yml           # docker-compose
 ```
 ### 7.3. Gdzie znaleźć konkretne funkcjonalności
 
